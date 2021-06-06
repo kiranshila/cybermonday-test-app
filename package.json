@@ -1,0 +1,25 @@
+{
+  "name": "shadow-test",
+  "version": "0.0.1",
+  "private": true,
+  "devDependencies": {
+    "shadow-cljs": "2.14.3"
+  },
+  "dependencies": {
+    "@dracula/dracula-ui": "^0.8.1",
+    "html-entities": "2.3.2",
+    "prism-react-renderer": "^1.2.1",
+    "prismjs": "^1.23.0",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-highlight": "^0.14.0",
+    "remark": "13.0.0",
+    "remark-deflist": "0.3.0",
+    "remark-footnotes": "3.0.0",
+    "remark-gfm": "1.0.0",
+    "remark-math": "4.0.0",
+    "remark-parse": "9.0.0",
+    "unified": "9.2.1",
+    "yaml": "1.10.2"
+  }
+}
