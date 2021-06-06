@@ -4,6 +4,7 @@
    [cybermonday.core :as cm]
    [cybermonday.ir :as ir]
    [reagent.core :as r]
+   [cljs.pprint :refer [pprint]]
    ["react-highlight" :default Highlight]
    [reagent.dom :as rdom]))
 
@@ -44,7 +45,7 @@
                        :align "center"
                        :color "pink"}
       "Parse Result"]
-     [:> Highlight {:language "clojure"} (with-out-str (cljs.pprint/pprint @parse-result))]
+     [:> Highlight {:language "clojure"} (with-out-str (pprint @parse-result))]
      [:> drac/Box
       [:> drac/Heading "AST Format"]
       [:> drac/Switch {:color "purple"
