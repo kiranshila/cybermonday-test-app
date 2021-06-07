@@ -2,7 +2,7 @@
 {:source-paths ["src"]
 
  :dependencies
- [[com.kiranshila/cybermonday "0.0.17"]
+ [[com.kiranshila/cybermonday "0.0.18"]
   [reagent/reagent "1.1.0"]]
 
  :dev-http {8020 "public"}
