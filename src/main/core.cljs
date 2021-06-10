@@ -6,15 +6,43 @@
    [reagent.core :as r]
    [cljs.pprint :refer [pprint]]
    ["react-highlight" :default Highlight]
-   [reagent.dom :as rdom]))
+   [reagent.dom :as rdom]
+   ["@matejmazur/react-katex" :as TeX]))
 
 (defonce ast-format (r/atom false))
 (defonce md-source (r/atom ""))
 
 (def format-to-type {false "Cybermonday IR"
                      true "HTML"})
+
+(defn lower-inline-math [[_ _ math]]
+  [:> TeX {:math math
+           :class "drac-text-white"}])
+
+(defn lower-fenced-code-block [[_ {:keys [language]} code]]
+  (if (or (= language "math")
+          (= language "latex")
+          (= language "tex"))
+    [:> TeX {:class "drac-text-white"
+             :block true} code]
+    [:> Highlight {:language language} code]))
+
 (def format-to-parser {false ir/md-to-ir
-                       true #(:body (cm/parse-md %))})
+                       true #(:body (cm/parse-md % {:lower-fns {:markdown/inline-math lower-inline-math
+                                                                :markdown/fenced-code-block lower-fenced-code-block}
+                                                    :default-attrs {:hr {:class "drac-divider drac-border-orange"}
+                                                                    :div {:class ["drac-text-white"]}
+                                                                    :p {:class ["drac-text drac-line-height drac-text-white"]}
+                                                                    :a {:class ["drac-anchor"
+                                                                                "drac-text"
+                                                                                "drac-text-purple"
+                                                                                "drac-text-pink--hover"
+                                                                                "drac-mb-sm"]}
+                                                                    :table {:class ["drac-table drac-table-cyan"]
+                                                                            :align "center"
+                                                                            :style {:margin "auto"
+                                                                                    :width "auto"}}
+                                                                    :th {:class ["drac-text" "drac-text-white"]}}}))})
 
 (defn parse-content []
   (reset! md-source (.-value (js/document.getElementById "md-area"))))
@@ -69,19 +97,7 @@
                        :align "center"
                        :color "pink"}
       "Rendered Result"]
-     (:body (cm/parse-md @md-source {:default-attrs {:hr {:class "drac-divider drac-border-orange"}
-                                                     :div {:class ["drac-text-white"]}
-                                                     :p {:class ["drac-text drac-line-height drac-text-white"]}
-                                                     :a {:class ["drac-anchor"
-                                                                 "drac-text"
-                                                                 "drac-text-purple"
-                                                                 "drac-text-pink--hover"
-                                                                 "drac-mb-sm"]}
-                                                     :table {:class ["drac-table drac-table-cyan"]
-                                                             :align "center"
-                                                             :style {:margin "auto"
-                                                                     :width "auto"}}
-                                                     :th {:class ["drac-text" "drac-text-white"]}}}))]]])
+     ((format-to-parser true) @md-source)]]])
 
 (defn ^:dev/after-load start []
   (rdom/render [app] (js/document.getElementById "app")))
