@@ -8,25 +8,29 @@
    ["react-highlight" :default Highlight]
    [reagent.dom :as rdom]))
 
-(def parse-result (r/atom nil))
-(def ast-format (r/atom false))
+(defonce ast-format (r/atom false))
+(defonce md-source (r/atom ""))
 
-(def format-to-type {false "IR"
+(def format-to-type {false "Cybermonday IR"
                      true "HTML"})
 (def format-to-parser {false ir/md-to-ir
                        true #(:body (cm/parse-md %))})
 
 (defn parse-content []
-  (reset! parse-result ((format-to-parser @ast-format) (.-value (js/document.getElementById "md-area")))))
+  (reset! md-source (.-value (js/document.getElementById "md-area"))))
 
 (defn app []
-  [:div
+  [:div {:style {:height "80%"}}
    [:> drac/Heading {:size "2xl"
                      :align "center"
                      :color "purpleCyan"}
-    "Cybermonday Markdown to Hiccup Tester"]
+    "Cybermonday Test Application"]
+   [:div {:align "center"}
+    [:> drac/Anchor {:size "lg"
+                     :href "https://github.com/kiranshila/cybermonday"}
+     "Check out the project on GitHub"]]
    [:> drac/Divider {:color "green"}]
-   [:div.flex-container
+   [:div.flex-container {:style {:height "100%"}}
     [:div.flex-child
      [:> drac/Heading {:size "xl"
                        :align "center"
@@ -34,7 +38,8 @@
       "Markdown"]
      [:textarea.drac-text-white.drac-bg-black-secondary
       {:id "md-area"
-       :style {:font-family "Fira Code"
+       :style {:resize "none"
+               :font-family "Fira Code"
                :border "none"
                :width "100%"
                :height "100%"
@@ -44,21 +49,39 @@
      [:> drac/Heading {:size "xl"
                        :align "center"
                        :color "pink"}
-      "Parse Result"]
-     [:> Highlight {:language "clojure"} (with-out-str (pprint @parse-result))]
+      "Syntax Tree"]
+     [:> Highlight {:language "clojure"} (with-out-str (pprint ((format-to-parser @ast-format) @md-source)))]
      [:> drac/Box
-      [:> drac/Heading "AST Format"]
-      [:> drac/Switch {:color "purple"
-                       :id "format"
-                       :name "format"
-                       :on-change (fn []
-                                    (reset! ast-format (.-checked (js/document.getElementById "format")))
-                                    (parse-content))
-                       :default-checked false}]
+      [:div {:align "center"}
+       [:> drac/Heading "Format"]
+       [:> drac/Switch {:color "purple"
+                        :id "format"
+                        :name "format"
+                        :on-change (fn []
+                                     (reset! ast-format (.-checked (js/document.getElementById "format"))))
+                        :default-checked false}]
 
-      [:label {:for "format"
-               :class "drac-text drac-text-white"}
-       (format-to-type @ast-format)]]]]])
+       [:label {:for "format"
+                :class "drac-text drac-text-white"}
+        (format-to-type @ast-format)]]]]
+    [:div.flex-child.drac-box
+     [:> drac/Heading {:size "xl"
+                       :align "center"
+                       :color "pink"}
+      "Rendered Result"]
+     (:body (cm/parse-md @md-source {:default-attrs {:hr {:class "drac-divider drac-border-orange"}
+                                                     :div {:class ["drac-text-white"]}
+                                                     :p {:class ["drac-text drac-line-height drac-text-white"]}
+                                                     :a {:class ["drac-anchor"
+                                                                 "drac-text"
+                                                                 "drac-text-purple"
+                                                                 "drac-text-pink--hover"
+                                                                 "drac-mb-sm"]}
+                                                     :table {:class ["drac-table drac-table-cyan"]
+                                                             :align "center"
+                                                             :style {:margin "auto"
+                                                                     :width "auto"}}
+                                                     :th {:class ["drac-text" "drac-text-white"]}}}))]]])
 
 (defn ^:dev/after-load start []
   (rdom/render [app] (js/document.getElementById "app")))
