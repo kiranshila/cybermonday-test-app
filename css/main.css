@@ -4,8 +4,24 @@
 
 .flex-child {
   flex: 1;
+  flex-flow: row;
+  width: 100%;
+  margin: 10px;
+  overflow: scroll;
 }
 
-.flex-child:first-child {
-  margin-right: 20px;
+table {
+  table-layout: auto;
+  width: auto;
+  margin: 0px;
+}
+
+html,
+body {
+  margin: 0;
+  height: 100%;
+}
+
+.app-div {
+  height: 100%;
 }
