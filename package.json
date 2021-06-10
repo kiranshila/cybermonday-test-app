@@ -3,7 +3,11 @@
   "version": "0.0.1",
   "private": true,
   "devDependencies": {
-    "shadow-cljs": "2.14.3"
+    "autoprefixer": "^10.2.6",
+    "cssnano": "^5.0.6",
+    "postcss-cli": "^8.3.1",
+    "shadow-cljs": "2.14.3",
+    "tailwindcss": "^2.1.4"
   },
   "dependencies": {
     "@dracula/dracula-ui": "^0.8.1",

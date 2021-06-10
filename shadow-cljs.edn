@@ -5,8 +5,6 @@
  [[com.kiranshila/cybermonday "0.0.32"]
   [reagent/reagent "1.1.0"]]
 
- :dev-http {8020 "public"}
-
  :builds
  {:app
   {:target :browser
@@ -14,4 +12,6 @@
    :asset-path "/js"
    :compiler-options {:output-feature-set :es8}
    :modules {:main
-             {:init-fn main.core/init}}}}}
+             {:init-fn main.core/init}}
+   :devtools {:http-root "public"
+              :http-port 8020}}}}
