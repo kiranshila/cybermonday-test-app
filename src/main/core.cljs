@@ -28,7 +28,8 @@
     [:> Highlight {:language language} code]))
 
 (def format-to-parser {false ir/md-to-ir
-                       true #(:body (cm/parse-md % {:lower-fns {:markdown/inline-math lower-inline-math
+                       true #(:body (cm/parse-md % {:parse-templates? true
+                                                    :lower-fns {:markdown/inline-math lower-inline-math
                                                                 :markdown/fenced-code-block lower-fenced-code-block}
                                                     :default-attrs {:hr {:class "drac-divider drac-border-orange"}
                                                                     :div {:class ["drac-text-white"]}
