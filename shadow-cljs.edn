@@ -2,7 +2,7 @@
 {:source-paths ["src"]
 
  :dependencies
- [[com.kiranshila/cybermonday "0.2.0"]
+ [[com.kiranshila/cybermonday "0.2.1"]
   [reagent/reagent "1.1.0"]]
 
  :builds
