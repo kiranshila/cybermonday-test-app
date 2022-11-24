@@ -1,6 +1,6 @@
 (ns main.core
   (:require
-   ["@dracula/dracula-ui" :as drac]
+   ["dracula-ui" :as drac]
    [cybermonday.core :as cm]
    [cybermonday.ir :as ir]
    [reagent.core :as r]
